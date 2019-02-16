@@ -19,7 +19,11 @@
         <div class="mdl-cell mdl-cell--4-col"></div>
       </div>
     </div>
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    <div v-show="isLoading" class="mdl-card mdl-shadow--2dp loading-container">
+      <div id="loading" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+      <span>请求中，请稍后……</span>
+    </div>
+    <table v-show="!isLoading" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
       <thead>
         <tr>
           <th class="mdl-data-table__header--sorted-ascending" @click="changeSort('id')">ID</th>
@@ -64,7 +68,7 @@
 <script>
 import Json2csvParser from "json2csv";
 import saveAs from "file-saver";
-import bus from '../bus'
+import bus from "../bus";
 
 export default {
   name: "HotWeibo",
@@ -104,8 +108,8 @@ export default {
       this.requested_at = response.data.data.requested_at;
       this.weibo_list = response.data.data.weibo_list;
       this.isLoading = false;
-      console.log(this.weibo_list.length)
-      bus.$emit('change-badge', this.weibo_list.length)
+      console.log(this.weibo_list.length);
+      bus.$emit("change-badge", this.weibo_list.length);
     },
     changeSort(val) {
       console.log(val);
@@ -182,5 +186,20 @@ table {
 }
 .text-column {
   max-width: 480px;
+}
+.loading-container {
+  /* width: 100%; */
+  width: 320px;
+  height: 64px;
+  min-height: 0;
+  padding: 16px 24px 8px 24px;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: calc(38.2vh - 132px) !important;
+}
+.loading-container #loading {
+  width: 100%;
+  margin-bottom: .75rem;
 }
 </style>
