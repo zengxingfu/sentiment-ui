@@ -10,7 +10,7 @@ import 'material-design-lite/material.min.js'
 
 Vue.config.productionTip = false
 Vue.prototype.$request = axios.create({
-  baseURL: 'http://weibo-sentiment.zengxingfu.com/api'
+  baseURL: 'https://anime-bang.zengxingfu.cn/api/'
 })
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
