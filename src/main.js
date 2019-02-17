@@ -7,6 +7,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
 import 'material-design-lite/dist/material.indigo-red.min.css'
 import 'material-design-lite/material.min.js'
+import 'dialog-polyfill/dialog-polyfill.css'
+import 'dialog-polyfill/dialog-polyfill.js'
 
 Vue.config.productionTip = false
 Vue.prototype.$request = axios.create({

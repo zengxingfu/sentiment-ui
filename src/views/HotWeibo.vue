@@ -1,5 +1,28 @@
 <template>
   <div>
+    <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+    <!-- 推荐 Dialog -->
+    <dialog class="mdl-dialog">
+      <div class="mdl-dialog__content">
+        <!-- <p>Allow this site to collect usage data to improve your experience?</p> -->
+        <div class="mdl-textfield mdl-js-textfield textarea-container">
+          <textarea
+            id="recommend-text"
+            class="mdl-textfield__input"
+            type="text"
+            rows="4"
+            v-model="recommendText"
+          ></textarea>
+        </div>
+      </div>
+      <div class="mdl-dialog__actions">
+        <!-- <button type="button" class="mdl-button">Agree</button> -->
+        <button type="button" class="mdl-button" @click="handleCopy">复制到剪贴板</button>
+      </div>
+    </dialog>
     <div class="mdl-card mdl-shadow--2dp table-filter-container">
       <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--12-col">
@@ -49,14 +72,14 @@
             @click="changeSort('attitudes_count')"
           >赞</th>
           <th class="mdl-data-table__cell--non-numeric">参考发表时间</th>
-          <th class="mdl-data-table__cell--non-numeric">原文链接</th>
+          <th class="mdl-data-table__cell--non-numeric">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="weibo in weibo_list" :key="weibo.id">
           <td>{{weibo.id}}</td>
           <td class="mdl-data-table__cell--non-numeric text-column">
-            <span v-html="weibo.text"></span>
+            <span v-html="weibo.text" :id="'weibo-text-' + String(weibo.id)"></span>
           </td>
           <td class="mdl-data-table__cell--non-numeric">{{weibo.user}}</td>
           <td>{{weibo.reposts_count}}</td>
@@ -64,7 +87,13 @@
           <td>{{weibo.attitudes_count}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{weibo.created_at}}</td>
           <td class="mdl-data-table__cell--non-numeric">
-            <a :href="weibo.scheme" target="_blank" rel="noopener noreferrer">查看原文</a>
+            <a :href="weibo.scheme" target="_blank" rel="noopener noreferrer">
+              <button class="mdl-button mdl-js-button mdl-js-ripple-effect">原文</button>
+            </a>
+            <button
+              class="mdl-button mdl-js-button mdl-js-ripple-effect"
+              @click="handleRecommend(weibo)"
+            >推荐</button>
           </td>
         </tr>
       </tbody>
@@ -101,11 +130,18 @@ export default {
         user: "全部"
       },
       requested_at: 0,
-      weibo_list: []
+      weibo_list: [],
+      recommendText: ""
     };
   },
   created() {
     this.fetchData(this.reqParams);
+  },
+  mounted() {
+    const dialog = document.querySelector("dialog");
+    if (!dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
   },
   methods: {
     async fetchData(params) {
@@ -115,11 +151,11 @@ export default {
       this.requested_at = response.data.data.requested_at;
       this.weibo_list = response.data.data.weibo_list;
       this.isLoading = false;
-      console.log(this.weibo_list.length);
+      // console.log(this.weibo_list.length);
       bus.$emit("change-badge", this.weibo_list.length);
     },
     changeSort(val) {
-      console.log(val);
+      // console.log(val);
       this.reqParams.sort = val;
       this.fetchData(this.reqParams);
     },
@@ -144,6 +180,40 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+    handleRecommend(weibo) {
+      this.showDialog();
+      const weiboText = document.querySelector(
+        "#weibo-text-" + String(weibo.id)
+      ).innerText;
+      this.recommendText = `@${weibo.user} ${weiboText} ${
+        weibo.scheme
+      } 转发${String(weibo.reposts_count)}`;
+    },
+    showDialog() {
+      const dialog = document.querySelector("dialog");
+      dialog.showModal();
+    },
+    closeDialog() {
+      const dialog = document.querySelector("dialog");
+      dialog.close();
+    },
+    handleCopy() {
+      const textarea = document.querySelector("#recommend-text");
+      textarea.select();
+      if (document.execCommand("copy")) {
+        document.execCommand("copy");
+        // alert("复制成功");
+        const snackbarContainer = document.querySelector("#toast");
+        snackbarContainer.MaterialSnackbar.showSnackbar({
+          message: "复制成功"
+        });
+      } else {
+        snackbarContainer.MaterialSnackbar.showSnackbar({
+          message: "浏览器暂不支持，请手动复制"
+        });
+      }
+      this.closeDialog()
     }
   }
 };
@@ -207,9 +277,25 @@ table {
 }
 .loading-container #loading {
   width: 100%;
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 .red {
-  color: #F44235 !important;
+  color: #f44235 !important;
+}
+dialog {
+  width: 38.2%;
+}
+dialog .textarea-container {
+  width: 100%;
+}
+dialog .textarea-container textarea {
+  font-size: 1rem;
+  line-height: 2rem;
+  color: rgba(0, 0, 0, 0.87);
+}
+@media (max-width: 1024px) {
+  dialog {
+    width: 61.8%;
+  }
 }
 </style>
