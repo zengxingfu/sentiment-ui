@@ -19,8 +19,8 @@
         </div>
       </div>
       <div class="mdl-dialog__actions">
-        <!-- <button type="button" class="mdl-button">Agree</button> -->
         <button type="button" class="mdl-button" @click="handleCopy">复制到剪贴板</button>
+        <button type="button" class="mdl-button close" @click="closeDialog">关闭</button>
       </div>
     </dialog>
     <div class="mdl-card mdl-shadow--2dp table-filter-container">
@@ -213,7 +213,7 @@ export default {
           message: "浏览器暂不支持，请手动复制"
         });
       }
-      this.closeDialog()
+      // this.closeDialog()
     }
   }
 };
