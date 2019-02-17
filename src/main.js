@@ -8,11 +8,12 @@ import 'dayjs/locale/zh-cn'
 import 'material-design-lite/dist/material.indigo-red.min.css'
 import 'material-design-lite/material.min.js'
 import 'dialog-polyfill/dialog-polyfill.css'
-import 'dialog-polyfill/dialog-polyfill.js'
+// import 'dialog-polyfill/dialog-polyfill.js'
 
 Vue.config.productionTip = false
 Vue.prototype.$request = axios.create({
   baseURL: 'https://anime-bang.zengxingfu.cn/api/'
+  // baseURL: 'http://weibo-sentiment.zengxingfu.com/api/'
 })
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
