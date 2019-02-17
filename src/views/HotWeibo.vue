@@ -26,19 +26,26 @@
     <table v-show="!isLoading" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
       <thead>
         <tr>
-          <th class="mdl-data-table__header--sorted-ascending" @click="changeSort('id')">ID</th>
+          <th
+            class="mdl-data-table__header--sorted-ascending"
+            v-bind:class="{red: reqParams.sort==='id'}"
+            @click="changeSort('id')"
+          >ID</th>
           <th class="mdl-data-table__cell--non-numeric text-column">微博内容</th>
           <th class="mdl-data-table__cell--non-numeric">作者</th>
           <th
             class="mdl-data-table__header--sorted-descending"
+            v-bind:class="{red: reqParams.sort==='reposts_count'}"
             @click="changeSort('reposts_count')"
           >转发</th>
           <th
             class="mdl-data-table__header--sorted-descending"
+            v-bind:class="{red: reqParams.sort==='comments_count'}"
             @click="changeSort('comments_count')"
           >评论</th>
           <th
             class="mdl-data-table__header--sorted-descending"
+            v-bind:class="{red: reqParams.sort==='attitudes_count'}"
             @click="changeSort('attitudes_count')"
           >赞</th>
           <th class="mdl-data-table__cell--non-numeric">参考发表时间</th>
@@ -90,7 +97,7 @@ export default {
         youtube: "YouTube精彩视频"
       },
       reqParams: {
-        sort: "id",
+        sort: "reposts_count",
         user: "全部"
       },
       requested_at: 0,
@@ -201,5 +208,8 @@ table {
 .loading-container #loading {
   width: 100%;
   margin-bottom: .75rem;
+}
+.red {
+  color: #F44235 !important;
 }
 </style>
