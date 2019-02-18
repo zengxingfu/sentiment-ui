@@ -17,10 +17,13 @@
             v-model="recommendText"
           ></textarea>
         </div>
+        <!-- <button
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent copy-button"
+        >复制到剪贴板</button>-->
       </div>
       <div class="mdl-dialog__actions">
-        <button type="button" class="mdl-button" @click="handleCopy">复制到剪贴板</button>
         <button type="button" class="mdl-button close" @click="closeDialog">关闭</button>
+        <button type="button" class="mdl-button" @click="handleCopy">复制到剪贴板</button>
       </div>
     </dialog>
     <div class="mdl-card mdl-shadow--2dp table-filter-container">
@@ -34,7 +37,7 @@
             class="export-xlsx mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
             :disabled="isLoading"
             @click="generateCSV"
-          >导出 .xlsx</button>
+          >导出 .csv</button>
           <div
             class="requested-at"
           >数据更新于 {{requested_at ? $dayjs(requested_at * 1000).fromNow() : ''}}</div>
@@ -79,7 +82,7 @@
         <tr v-for="weibo in weibo_list" :key="weibo.id">
           <td>{{weibo.id}}</td>
           <td class="mdl-data-table__cell--non-numeric text-column">
-            <span v-html="weibo.text" :id="'weibo-text-' + String(weibo.id)"></span>
+            <span v-html="weiboTextProcess(weibo.text)" :id="'weibo-text-' + String(weibo.id)"></span>
           </td>
           <td class="mdl-data-table__cell--non-numeric">{{weibo.user}}</td>
           <td>{{weibo.reposts_count}}</td>
@@ -102,121 +105,131 @@
 </template>
 
 <script>
-import Json2csvParser from "json2csv";
-import saveAs from "file-saver";
-import bus from "../bus";
+import Json2csvParser from 'json2csv'
+import saveAs from 'file-saver'
+import bus from '../bus'
 
 export default {
-  name: "HotWeibo",
+  name: 'HotWeibo',
   data() {
     return {
       isLoading: false,
       userFilter: {
-        all: "全部",
-        li: "梨视频",
-        yishou: "一手Video",
-        shijian: "时间视频",
-        pengpai: "澎湃新闻",
-        women: "新京报我们视频",
-        yangshi: "央视新闻",
-        xinhua: "新华视点",
-        ziniu: "紫牛新闻",
-        renren: "人人视频",
-        huojian: "火箭视频",
-        youtube: "YouTube精彩视频"
+        all: '全部',
+        li: '梨视频',
+        yishou: '一手Video',
+        shijian: '时间视频',
+        pengpai: '澎湃新闻',
+        women: '新京报我们视频',
+        yangshi: '央视新闻',
+        xinhua: '新华视点',
+        ziniu: '紫牛新闻',
+        renren: '人人视频',
+        huojian: '火箭视频',
+        youtube: 'YouTube精彩视频'
       },
       reqParams: {
-        sort: "reposts_count",
-        user: "全部"
+        sort: 'reposts_count',
+        user: '全部'
       },
       requested_at: 0,
       weibo_list: [],
-      recommendText: ""
-    };
+      recommendText: ''
+    }
   },
   created() {
-    this.fetchData(this.reqParams);
+    this.fetchData(this.reqParams)
   },
   mounted() {
-    const dialog = document.querySelector("dialog");
+    const dialog = document.querySelector('dialog')
     if (!dialog.showModal) {
-      dialogPolyfill.registerDialog(dialog);
+      dialogPolyfill.registerDialog(dialog)
     }
   },
   methods: {
     async fetchData(params) {
-      this.isLoading = true;
-      const response = await this.$request("/weibo", { params });
+      this.isLoading = true
+      const response = await this.$request('/weibo', { params })
       // console.log(response.data);
-      this.requested_at = response.data.data.requested_at;
-      this.weibo_list = response.data.data.weibo_list;
-      this.isLoading = false;
+      this.requested_at = response.data.data.requested_at
+      this.weibo_list = response.data.data.weibo_list
+      this.isLoading = false
       // console.log(this.weibo_list.length);
-      bus.$emit("change-badge", this.weibo_list.length);
+      bus.$emit('change-badge', this.weibo_list.length)
     },
     changeSort(val) {
       // console.log(val);
-      this.reqParams.sort = val;
-      this.fetchData(this.reqParams);
+      this.reqParams.sort = val
+      this.fetchData(this.reqParams)
     },
     generateCSV() {
-      const fields = [];
+      const fields = []
       for (const key in this.weibo_list[0]) {
-        fields.push(key);
+        fields.push(key)
       }
       // const opts = { fields };
       try {
         const parser = new Json2csvParser.Parser({
           fields,
           withBOM: true
-        });
-        const csv = parser.parse(this.weibo_list);
+        })
+        const csv = parser.parse(this.weibo_list)
         // console.log(csv);
         const filename = `热门微博数据-${this.reqParams.user}-${this.$dayjs(
           this.requested_at * 1000
-        ).format("YYYYMMDDHHmmss")}.csv`;
-        const blob = new Blob([csv], { type: "text/csv" });
-        saveAs(blob, filename);
+        ).format('YYYYMMDDHHmmss')}.csv`
+        const blob = new Blob([csv], { type: 'text/csv' })
+        saveAs(blob, filename)
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
     },
     handleRecommend(weibo) {
-      this.showDialog();
+      this.showDialog()
       const weiboText = document.querySelector(
-        "#weibo-text-" + String(weibo.id)
-      ).innerText;
+        '#weibo-text-' + String(weibo.id)
+      ).innerText
       this.recommendText = `@${weibo.user} ${weiboText} ${
         weibo.scheme
-      } 转发${String(weibo.reposts_count)}`;
+      } 转发${String(weibo.reposts_count)}`
     },
     showDialog() {
-      const dialog = document.querySelector("dialog");
-      dialog.showModal();
+      const dialog = document.querySelector('dialog')
+      dialog.showModal()
     },
     closeDialog() {
-      const dialog = document.querySelector("dialog");
-      dialog.close();
+      const dialog = document.querySelector('dialog')
+      dialog.close()
     },
     handleCopy() {
-      const textarea = document.querySelector("#recommend-text");
-      textarea.select();
-      if (document.execCommand("copy")) {
-        document.execCommand("copy");
+      const textarea = document.querySelector('#recommend-text')
+      textarea.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
         // alert("复制成功");
-        const snackbarContainer = document.querySelector("#toast");
+        const snackbarContainer = document.querySelector('#toast')
         snackbarContainer.MaterialSnackbar.showSnackbar({
-          message: "复制成功"
-        });
+          message: '复制成功'
+        })
       } else {
         snackbarContainer.MaterialSnackbar.showSnackbar({
-          message: "浏览器暂不支持，请手动复制"
-        });
+          message: '浏览器暂不支持，请手动复制'
+        })
       }
       // this.closeDialog()
+    },
+    weiboTextProcess(text) {
+      const pattern = '...<a href="/status/'
+      if (text.indexOf(pattern) > 0) {
+        text = text.replace(
+          pattern,
+          '...<a target="_blank" href="https://m.weibo.cn/status/'
+        )
+      }
+      return text
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -298,4 +311,7 @@ dialog .textarea-container textarea {
     width: 61.8%;
   }
 }
+/* .copy-button {
+  margin-left: calc(100% - 116px);
+} */
 </style>
