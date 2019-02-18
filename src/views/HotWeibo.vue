@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="return-top">
+      <a href="#table-filter">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+          <i class="material-icons">arrow_upward</i>
+        </button>
+      </a>
+    </div>
     <div id="toast" class="mdl-js-snackbar mdl-snackbar">
       <div class="mdl-snackbar__text"></div>
       <button class="mdl-snackbar__action" type="button"></button>
@@ -26,7 +33,7 @@
         <button type="button" class="mdl-button" @click="handleCopy">复制到剪贴板</button>
       </div>
     </dialog>
-    <div class="mdl-card mdl-shadow--2dp table-filter-container">
+    <div id="table-filter" class="mdl-card mdl-shadow--2dp table-filter-container">
       <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--12-col">
           <div class="filter-label">筛选：</div>
@@ -227,6 +234,13 @@ export default {
         )
       }
       return text
+    },
+    returnTop() {
+      console.log('yahaha')
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
     }
   }
 }
@@ -310,6 +324,12 @@ dialog .textarea-container textarea {
   dialog {
     width: 61.8%;
   }
+}
+.return-top {
+  position: fixed;
+  z-index: 999;
+  bottom: 2rem;
+  right: 2rem;
 }
 /* .copy-button {
   margin-left: calc(100% - 116px);
