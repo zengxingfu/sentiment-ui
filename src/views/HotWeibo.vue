@@ -6,7 +6,7 @@
           <i class="material-icons">arrow_upward</i>
         </button>
       </a>
-    </div> -->
+    </div>-->
     <div id="toast" class="mdl-js-snackbar mdl-snackbar">
       <div class="mdl-snackbar__text"></div>
       <button class="mdl-snackbar__action" type="button"></button>
@@ -76,6 +76,7 @@
             v-bind:class="{red: reqParams.sort==='id'}"
             @click="changeSort('id')"
           >发表时间</th>
+          <th class="mdl-data-table__cell--non-numeric text-column">类型</th>
           <th class="mdl-data-table__cell--non-numeric text-column">预览</th>
           <th class="mdl-data-table__cell--non-numeric text-column">微博内容</th>
           <th class="mdl-data-table__cell--non-numeric">作者</th>
@@ -110,11 +111,13 @@
       <tbody>
         <tr v-for="weibo in weibo_list" :key="weibo.id">
           <!-- <td>{{weibo.id}}</td> -->
-          <td class="mdl-data-table__cell--non-numeric">{{weibo.created_at}}</td>
+          <td class="mdl-data-table__cell--non-numeric">{{weibo.abs_time ? $dayjs(weibo.abs_time * 1000).fromNow() : weibo.created_at}}</td>
           <td
-            class="mdl-data-table__cell--non-numeric td-weibo-page-pic"
-          >
-            <img class="weibo-page-pic" :src="weibo.page_pic" :id="'page-pic-' + weibo.id" alt>
+            class="mdl-data-table__cell--non-numeric"
+          >{{weibo.page_info_type ? {video: '视频', article: '文章', topic: '话题', webpage: '视频网页', live: '直播'}[weibo.page_info_type] : '普通微博'}}</td>
+          <td class="mdl-data-table__cell--non-numeric td-weibo-page-pic">
+            <img v-if="weibo.page_pic" class="weibo-page-pic" :src="weibo.page_pic" :id="'page-pic-' + weibo.id" alt>
+            <img v-else :src="weibo.pics[0]" class="weibo-page-pic" :id="'page-pic-' + weibo.id" alt="">
           </td>
           <td class="mdl-data-table__cell--non-numeric text-column">
             <span v-html="weiboTextProcess(weibo.text)" :id="'weibo-text-' + String(weibo.id)"></span>
@@ -164,7 +167,7 @@ export default {
         youtube: "YouTube精彩视频"
       },
       reqParams: {
-        sort: "hot_val",
+        sort: "id",
         user: "全部"
       },
       requested_at: 0,
