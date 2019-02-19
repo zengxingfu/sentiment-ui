@@ -113,8 +113,6 @@
           <td class="mdl-data-table__cell--non-numeric">{{weibo.created_at}}</td>
           <td
             class="mdl-data-table__cell--non-numeric td-weibo-page-pic"
-            v-on:mouseover="handleZoomin(weibo.id)"
-            v-on:mouseout="handleZoomout(weibo.id)"
           >
             <img class="weibo-page-pic" :src="weibo.page_pic" :id="'page-pic-' + weibo.id" alt>
           </td>
@@ -271,7 +269,6 @@ export default {
       return text;
     },
     returnTop() {
-      console.log("yahaha");
       window.scrollTo({
         top: 0,
         behavior: "smooth"
@@ -338,10 +335,13 @@ table {
 .text-column {
   max-width: 480px;
 }
+.text-column span {
+  line-height: 1.5rem;
+}
 .weibo-page-pic {
   width: 120px;
   transition: all 0.5s;
-  cursor: zoom-in;
+  /* cursor: zoom-in; */
   /* height: 120px; */
 }
 /* .weibo-page-pic:hover {
