@@ -75,8 +75,8 @@
             class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending"
             v-bind:class="{red: reqParams.sort==='id'}"
             @click="changeSort('id')"
-          >发表时间</th>
-          <th class="mdl-data-table__cell--non-numeric text-column">类型</th>
+          >时间</th>
+          <!-- <th class="mdl-data-table__cell--non-numeric text-column">类型</th> -->
           <th class="mdl-data-table__cell--non-numeric text-column">预览</th>
           <th class="mdl-data-table__cell--non-numeric text-column">微博内容</th>
           <th class="mdl-data-table__cell--non-numeric">作者</th>
@@ -84,7 +84,7 @@
             class="mdl-data-table__header--sorted-descending"
             v-bind:class="{red: reqParams.sort==='hot_val'}"
             @click="changeSort('hot_val')"
-          >计算热度
+          >热度
             <div id="header-hot_value" class="icon material-icons">
               <i class="material-icons">help</i>
             </div>
@@ -111,13 +111,27 @@
       <tbody>
         <tr v-for="weibo in weibo_list" :key="weibo.id">
           <!-- <td>{{weibo.id}}</td> -->
-          <td class="mdl-data-table__cell--non-numeric">{{weibo.abs_time ? $dayjs(weibo.abs_time * 1000).fromNow() : weibo.created_at}}</td>
           <td
             class="mdl-data-table__cell--non-numeric"
-          >{{weibo.page_info_type ? {video: '视频', article: '文章', topic: '话题', webpage: '视频网页', live: '直播'}[weibo.page_info_type] : '普通微博'}}</td>
+          >{{weibo.abs_time ? $dayjs(weibo.abs_time * 1000).fromNow() : weibo.created_at}}</td>
+          <!-- <td
+            class="mdl-data-table__cell--non-numeric"
+          >{{weibo.page_info_type ? {video: '视频', article: '文章', topic: '话题', webpage: '视频网页', live: '直播'}[weibo.page_info_type] : '普通微博'}}</td>-->
           <td class="mdl-data-table__cell--non-numeric td-weibo-page-pic">
-            <img v-if="weibo.page_pic" class="weibo-page-pic" :src="weibo.page_pic" :id="'page-pic-' + weibo.id" alt>
-            <img v-else :src="weibo.pics[0]" class="weibo-page-pic" :id="'page-pic-' + weibo.id" alt="">
+            <img
+              v-if="weibo.page_pic"
+              class="weibo-page-pic"
+              :src="weibo.page_pic"
+              :id="'page-pic-' + weibo.id"
+              alt=""
+            >
+            <img
+              v-else
+              :src="weibo.pics[0]"
+              class="weibo-page-pic"
+              :id="'page-pic-' + weibo.id"
+              alt=""
+            >
           </td>
           <td class="mdl-data-table__cell--non-numeric text-column">
             <span v-html="weiboTextProcess(weibo.text)" :id="'weibo-text-' + String(weibo.id)"></span>
@@ -143,46 +157,46 @@
 </template>
 
 <script>
-import Json2csvParser from "json2csv";
-import saveAs from "file-saver";
-import bus from "../bus";
+import Json2csvParser from 'json2csv'
+import saveAs from 'file-saver'
+import bus from '../bus'
 
 export default {
-  name: "HotWeibo",
+  name: 'HotWeibo',
   data() {
     return {
       isLoading: false,
       userFilter: {
-        all: "全部",
-        li: "梨视频",
-        yishou: "一手Video",
-        shijian: "时间视频",
-        pengpai: "澎湃新闻",
-        women: "新京报我们视频",
-        yangshi: "央视新闻",
-        xinhua: "新华视点",
-        ziniu: "紫牛新闻",
-        renren: "人人视频",
-        huojian: "火箭视频",
-        youtube: "YouTube精彩视频"
+        all: '全部',
+        li: '梨视频',
+        yishou: '一手Video',
+        shijian: '时间视频',
+        pengpai: '澎湃新闻',
+        women: '新京报我们视频',
+        yangshi: '央视新闻',
+        xinhua: '新华视点',
+        ziniu: '紫牛新闻',
+        renren: '人人视频',
+        huojian: '火箭视频',
+        youtube: 'YouTube精彩视频'
       },
       reqParams: {
-        sort: "id",
-        user: "全部"
+        sort: 'id',
+        user: '全部'
       },
       requested_at: 0,
       weibo_list: [],
-      recommendText: "",
-      previewUrl: ""
-    };
+      recommendText: '',
+      previewUrl: ''
+    }
   },
   created() {
-    this.fetchData(this.reqParams);
+    this.fetchData(this.reqParams)
   },
   mounted() {
-    const recommendDialog = document.querySelector("dialog#recommend-dialog");
+    const recommendDialog = document.querySelector('dialog#recommend-dialog')
     if (!recommendDialog.showModal) {
-      dialogPolyfill.registerDialog(recommendDialog);
+      dialogPolyfill.registerDialog(recommendDialog)
     }
     // const previewDialog = document.querySelector("dialog#preview-dialog");
     // if (!previewDialog.showModal) {
@@ -191,102 +205,102 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      this.isLoading = true;
-      const response = await this.$request("/weibo", { params });
+      this.isLoading = true
+      const response = await this.$request('/weibo', { params })
       // console.log(response.data);
-      this.requested_at = response.data.data.requested_at;
-      this.weibo_list = response.data.data.weibo_list;
-      this.isLoading = false;
+      this.requested_at = response.data.data.requested_at
+      this.weibo_list = response.data.data.weibo_list
+      this.isLoading = false
       // console.log(this.weibo_list.length);
-      bus.$emit("change-badge", this.weibo_list.length);
+      bus.$emit('change-badge', this.weibo_list.length)
     },
     changeSort(val) {
       // console.log(val);
-      this.reqParams.sort = val;
-      this.fetchData(this.reqParams);
+      this.reqParams.sort = val
+      this.fetchData(this.reqParams)
     },
     generateCSV() {
-      const fields = [];
+      const fields = []
       for (const key in this.weibo_list[0]) {
-        fields.push(key);
+        fields.push(key)
       }
       // const opts = { fields };
       try {
         const parser = new Json2csvParser.Parser({
           fields,
           withBOM: true
-        });
-        const csv = parser.parse(this.weibo_list);
+        })
+        const csv = parser.parse(this.weibo_list)
         // console.log(csv);
         const filename = `热门微博数据-${this.reqParams.user}-${this.$dayjs(
           this.requested_at * 1000
-        ).format("YYYYMMDDHHmmss")}.csv`;
-        const blob = new Blob([csv], { type: "text/csv" });
-        saveAs(blob, filename);
+        ).format('YYYYMMDDHHmmss')}.csv`
+        const blob = new Blob([csv], { type: 'text/csv' })
+        saveAs(blob, filename)
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
     },
     handleRecommend(weibo) {
-      this.showDialog("recommend-dialog");
+      this.showDialog('recommend-dialog')
       const weiboText = document.querySelector(
-        "#weibo-text-" + String(weibo.id)
-      ).innerText;
+        '#weibo-text-' + String(weibo.id)
+      ).innerText
       this.recommendText = `@${weibo.user} ${weiboText} ${
         weibo.scheme
-      } 转发${String(weibo.reposts_count)}`;
+      } 转发${String(weibo.reposts_count)}`
     },
     showDialog(id) {
-      const dialog = document.querySelector("#" + id);
-      dialog.showModal();
+      const dialog = document.querySelector('#' + id)
+      dialog.showModal()
     },
     closeDialog(id) {
-      const dialog = document.querySelector("#" + id);
-      dialog.close();
+      const dialog = document.querySelector('#' + id)
+      dialog.close()
     },
     handleCopy() {
-      const textarea = document.querySelector("#recommend-text");
-      textarea.select();
-      if (document.execCommand("copy")) {
-        document.execCommand("copy");
+      const textarea = document.querySelector('#recommend-text')
+      textarea.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
         // alert("复制成功");
-        const snackbarContainer = document.querySelector("#toast");
+        const snackbarContainer = document.querySelector('#toast')
         snackbarContainer.MaterialSnackbar.showSnackbar({
-          message: "复制成功"
-        });
+          message: '复制成功'
+        })
       } else {
         snackbarContainer.MaterialSnackbar.showSnackbar({
-          message: "浏览器暂不支持，请手动复制"
-        });
+          message: '浏览器暂不支持，请手动复制'
+        })
       }
       // this.closeDialog()
     },
     weiboTextProcess(text) {
-      const pattern = '...<a href="/status/';
+      const pattern = '...<a href="/status/'
       if (text.indexOf(pattern) > 0) {
         text = text.replace(
           pattern,
           '...<a target="_blank" href="https://m.weibo.cn/status/'
-        );
+        )
       }
-      return text;
+      return text
     },
     returnTop() {
       window.scrollTo({
         top: 0,
-        behavior: "smooth"
-      });
+        behavior: 'smooth'
+      })
     },
     handleZoomin(id) {
-      const img = document.querySelector("#page-pic-" + id);
-      img.style["width"] = "320px";
+      const img = document.querySelector('#page-pic-' + id)
+      img.style['width'] = '320px'
     },
     handleZoomout(id) {
-      const img = document.querySelector("#page-pic-" + id);
-      img.style["width"] = "120px";
+      const img = document.querySelector('#page-pic-' + id)
+      img.style['width'] = '120px'
     }
   }
-};
+}
 </script>
 
 <style scoped>
