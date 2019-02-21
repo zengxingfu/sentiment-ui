@@ -62,14 +62,14 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      this.isLoading = true;
-      const response = await this.$request("/weibo", { params });
+      this.isLoading = true
+      const response = await this.$request('/weibo', { params })
       // console.log(response.data);
-      this.requested_at = response.data.data.requested_at;
-      this.weibo_list = response.data.data.weibo_list;
-      this.isLoading = false;
+      this.requested_at = response.data.data.requested_at
+      this.weibo_list = response.data.data.weibo_list
+      this.isLoading = false
       // console.log(this.weibo_list.length);
-      bus.$emit("change-badge", this.weibo_list.length);
+      bus.$emit('change-badge', this.weibo_list.length)
     },
     changeTarget(target) {
       this.reqParams.user = target;
