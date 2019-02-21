@@ -10,7 +10,7 @@
           <label
             class="mdl-button mdl-js-button mdl-button--icon"
             for="fixed-header-drawer-exp"
-            @click="handleSwitchMenu('/help')"
+            @click="handleSwitchMenu('help')"
           >
             <i class="material-icons">help</i>
           </label>
@@ -69,7 +69,6 @@ export default {
     };
   },
   created() {
-    this.getTarget();
     this.getWeiboCounts();
   },
   methods: {
@@ -85,7 +84,10 @@ export default {
       if (route === "") {
         if (this.$route.name !== "hot") window.location.assign("/");
       } else if (route === "latest") {
-        if (this.$route.name !== "latest") window.location.assign("/#/latest");
+        if (this.$route.name !== "latest") {
+          window.location.reload();
+          window.location.assign("/#/latest");
+        }
       } else {
         this.$router.push("/" + route);
         const layout = document.getElementsByClassName(
@@ -108,14 +110,6 @@ export default {
           )[0];
           drawerButton.setAttribute("aria-expanded", "false");
         }
-      }
-    },
-    async getTarget() {
-      try {
-        const r = await this.$request.get("/target");
-        this.$global.targets = r.data.data;
-      } catch (error) {
-        throw "获取观测目标失败，请重试";
       }
     }
   }

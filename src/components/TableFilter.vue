@@ -15,9 +15,7 @@
           :disabled="isLoading"
           @click="generateCSV"
         >导出 .csv</button>
-        <div
-          class="requested-at"
-        >数据更新于 {{requestedat ? $dayjs(requestedat * 1000).fromNow() : ''}}</div>
+        <div class="requested-at">数据更新于 {{requestedat ? $dayjs(requestedat * 1000).fromNow() : ''}}</div>
       </div>
       <div class="mdl-cell mdl-cell--4-col"></div>
     </div>
@@ -27,21 +25,36 @@
 export default {
   data() {
     return {
-      current: 'all'
+      current: "all",
+      targets: [
+        {
+          user_id: "all",
+          screen_name: "全部"
+        }
+      ]
     };
   },
   props: {
-    targets: Array,
     requestedat: Number,
     isLoading: Boolean
   },
-  created() {},
+  created() {
+    this.getTarget();
+  },
   methods: {
     handleSelect() {
       this.$emit("change-target", this.current);
     },
     generateCSV() {
       this.$emit("export-csv");
+    },
+    async getTarget() {
+      try {
+        const r = await this.$request.get("/target");
+        this.targets = this.targets.concat(r.data.data);
+      } catch (error) {
+        throw "获取观测目标失败，请重试";
+      }
     }
   }
 };

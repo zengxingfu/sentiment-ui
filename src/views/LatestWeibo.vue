@@ -4,7 +4,6 @@
     <recommend-dialog></recommend-dialog>
     <!-- Component: TableFilter -->
     <table-filter
-      :targets="targets"
       :is-loading="isLoading"
       :requestedat="requested_at"
       v-on:change-target="changeTarget"
@@ -58,8 +57,6 @@ export default {
   },
   created() {
     this.fetchData(this.reqParams);
-    const targets = this.$global.targets;
-    for (const target of targets) this.targets.push(target);
   },
   methods: {
     async fetchData(params) {
