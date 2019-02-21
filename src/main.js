@@ -13,11 +13,12 @@ import 'dialog-polyfill/dialog-polyfill.css'
 Vue.config.productionTip = false
 Vue.prototype.$request = axios.create({
   baseURL: 'https://anime-bang.zengxingfu.cn/api/'
-  // baseURL: 'http://weibo-sentiment.zengxingfu.com/api/'
+  // baseURL: 'http://localhost/api/'
 })
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
 Vue.prototype.$dayjs = dayjs
+Vue.prototype.$global = {}
 
 new Vue({
   router,

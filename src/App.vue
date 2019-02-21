@@ -28,13 +28,16 @@
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Weibo Sentiment</span>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('/')">
-          <span class="mdl-badge" :data-badge="weiboCount">热门微博</span>
+        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('')">
+          <span class="mdl-badge" :data-badge="counts.hot">热门微博</span>
+        </a>
+        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('latest')">
+          <span class="mdl-badge" :data-badge="counts.latest">最新动态</span>
         </a>
         <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('/archives')">历史归档</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('/settings')">设置</a>-->
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('/help')">使用说明</a>
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('/about')">关于</a>
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('help')">使用说明</a>
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('about')">关于</a>
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -56,22 +59,35 @@ export default {
         archives: "历史归档",
         settings: "设置",
         about: "关于",
-        help: "使用说明"
+        help: "使用说明",
+        latest: "最新动态"
       },
-      weiboCount: 0
+      counts: {
+        hot: 0,
+        latest: 0
+      }
     };
   },
   created() {
-    bus.$on("change-badge", val => {
-      this.weiboCount = val;
-    });
+    this.getTarget();
+    this.getWeiboCounts();
   },
   methods: {
+    async getWeiboCounts() {
+      try {
+        const r = await this.$request.get("/counts");
+        this.counts = r.data.data;
+      } catch (error) {
+        throw "获取微博数量失败";
+      }
+    },
     handleSwitchMenu(route) {
-      if (route === "/") {
+      if (route === "") {
         if (this.$route.name !== "hot") window.location.assign("/");
+      } else if (route === "latest") {
+        if (this.$route.name !== "latest") window.location.assign("/#/latest");
       } else {
-        this.$router.push(route);
+        this.$router.push("/" + route);
         const layout = document.getElementsByClassName(
           "mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header has-drawer is-upgraded"
         )[0];
@@ -92,6 +108,14 @@ export default {
           )[0];
           drawerButton.setAttribute("aria-expanded", "false");
         }
+      }
+    },
+    async getTarget() {
+      try {
+        const r = await this.$request.get("/target");
+        this.$global.targets = r.data.data;
+      } catch (error) {
+        throw "获取观测目标失败，请重试";
       }
     }
   }

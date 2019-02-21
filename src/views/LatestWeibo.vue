@@ -31,7 +31,7 @@ import LoadingBar from "../components/LoadingBar";
 import { generateCSV } from "../utils";
 
 export default {
-  name: "HotWeibo",
+  name: "LatestWeibo",
   components: {
     TableFilter,
     WeiboTable,
@@ -49,7 +49,8 @@ export default {
       ],
       reqParams: {
         sort: "id",
-        user: "all"
+        user: "all",
+        type: "latest"
       },
       requested_at: 0,
       weibo_list: []
