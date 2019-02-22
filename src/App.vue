@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import bus from "./bus";
 export default {
   data() {
     return {
@@ -83,12 +82,6 @@ export default {
     handleSwitchMenu(route) {
       if (route === "") {
         if (this.$route.name !== "hot") window.location.assign("/");
-      } else if (route === "latest") {
-        if (this.$route.name !== "latest") {
-          // window.location.reload();
-          // window.location.assign("/#/latest");
-          this.$router.push("/" + route);
-        }
       } else {
         this.$router.push("/" + route);
         const layout = document.getElementsByClassName(
