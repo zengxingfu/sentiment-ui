@@ -15,6 +15,7 @@
     <weibo-table
       :table-data="weibo_list"
       :is-loading="isLoading"
+      :sort="reqParams.sort"
       v-on:change-sort="changeSort"
       v-on:recommend="handleRecommend"
     ></weibo-table>

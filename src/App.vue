@@ -32,7 +32,7 @@
           <span class="mdl-badge" :data-badge="counts.hot">热门微博</span>
         </a>
         <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('latest')">
-          <span class="mdl-badge" :data-badge="counts.latest">最新动态</span>
+          <span class="mdl-badge" :data-badge="counts.latest">增速最快</span>
         </a>
         <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('/archives')">历史归档</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('/settings')">设置</a>-->
@@ -60,7 +60,7 @@ export default {
         settings: "设置",
         about: "关于",
         help: "使用说明",
-        latest: "最新动态"
+        latest: "增速最快"
       },
       counts: {
         hot: 0,
@@ -85,8 +85,9 @@ export default {
         if (this.$route.name !== "hot") window.location.assign("/");
       } else if (route === "latest") {
         if (this.$route.name !== "latest") {
-          window.location.reload();
-          window.location.assign("/#/latest");
+          // window.location.reload();
+          // window.location.assign("/#/latest");
+          this.$router.push("/" + route);
         }
       } else {
         this.$router.push("/" + route);

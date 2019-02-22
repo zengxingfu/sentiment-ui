@@ -19,8 +19,8 @@
             class="mdl-data-table__cell--non-numeric mdl-data-table__header--sorted-ascending"
             v-bind:class="{red: sort==='id'}"
             @click="changeSort('id')"
-          >发表时间</th>
-          <th class="mdl-data-table__cell--non-numeric text-column">类型</th>
+          >时间</th>
+          <!-- <th class="mdl-data-table__cell--non-numeric text-column">类型</th> -->
           <th class="mdl-data-table__cell--non-numeric text-column">预览</th>
           <th class="mdl-data-table__cell--non-numeric text-column">微博内容</th>
           <th class="mdl-data-table__cell--non-numeric">作者</th>
@@ -28,7 +28,7 @@
             class="mdl-data-table__header--sorted-descending"
             v-bind:class="{red: sort==='hot_val'}"
             @click="changeSort('hot_val')"
-          >计算热度
+          >热度
             <div id="header-hot_value" class="icon material-icons">
               <i class="material-icons">help</i>
             </div>
@@ -58,9 +58,9 @@
           <td
             class="mdl-data-table__cell--non-numeric"
           >{{weibo.abs_time ? $dayjs(weibo.abs_time * 1000).fromNow() : weibo.created_at}}</td>
-          <td
+          <!-- <td
             class="mdl-data-table__cell--non-numeric"
-          >{{weibo.page_info_type ? {video: '视频', article: '文章', topic: '话题', webpage: '视频网页', live: '直播'}[weibo.page_info_type] : '普通微博'}}</td>
+          >{{weibo.page_info_type ? {video: '视频', article: '文章', topic: '话题', webpage: '视频网页', live: '直播'}[weibo.page_info_type] : '普通微博'}}</td>-->
           <td class="mdl-data-table__cell--non-numeric td-weibo-page-pic">
             <img
               v-if="weibo.page_pic"
@@ -103,12 +103,11 @@
 export default {
   props: {
     tableData: Array,
-    isLoading: Boolean
+    isLoading: Boolean,
+    sort: String
   },
   data() {
-    return {
-      sort: "id"
-    };
+    return {};
   },
   methods: {
     weiboTextProcess(text) {
@@ -122,7 +121,7 @@ export default {
       return text;
     },
     changeSort(val) {
-      this.sort = val;
+      // this.sort = val;
       this.$emit("change-sort", val);
     }
   }
