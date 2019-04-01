@@ -53,7 +53,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="weibo in tableData" :key="weibo.id">
+        <tr
+          v-for="weibo in tableData"
+          :key="weibo.id"
+          v-bind:class="{'high-light': weibo.user === '人民日报'}"
+        >
           <!-- <td>{{weibo.id}}</td> -->
           <td
             class="mdl-data-table__cell--non-numeric"
@@ -67,14 +71,14 @@
               class="weibo-page-pic"
               :src="weibo.page_pic"
               :id="'page-pic-' + weibo.id"
-              alt
+              alt=""
             >
             <img
               v-else
               :src="weibo.pics[0]"
               class="weibo-page-pic"
               :id="'page-pic-' + weibo.id"
-              alt
+              alt=""
             >
           </td>
           <td class="mdl-data-table__cell--non-numeric text-column">
@@ -154,5 +158,8 @@ table {
 } */
 .red {
   color: #f44235 !important;
+}
+.high-light {
+  background-color: rgba(244, 67, 54, 0.1);
 }
 </style>
