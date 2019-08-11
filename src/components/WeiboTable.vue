@@ -56,7 +56,7 @@
         <tr
           v-for="weibo in tableData"
           :key="weibo.id"
-          v-bind:class="{'high-light': weibo.user === '人民日报'}"
+          v-bind:class="{'high-light': weibo.user === '人民日报', 'high-light-blue': weibo.user === '央视新闻'}"
         >
           <!-- <td>{{weibo.id}}</td> -->
           <td
@@ -161,5 +161,8 @@ table {
 }
 .high-light {
   background-color: rgba(244, 67, 54, 0.1);
+}
+.high-light-blue {
+  background-color: rgba(0, 149, 255, 0.1);
 }
 </style>
