@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>滚动新闻</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: rgb(247, 247, 247);
+        max-height: 100vh;
+        overflow: hidden;
+      }
+      .iframe-group {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      iframe {
+        height: calc(100vh - 4rem);
+        width: 24%;
+      }
+      nav {
+        margin-bottom: 1rem;
+        background-color: white;
+        -moz-box-shadow: 0px 2px 5px #c2c2c2;
+        -webkit-box-shadow: 0px 2px 5px #c2c2c2;
+        box-shadow: 0px 2px 5px #c2c2c2;
+        width: 100vw;
+        height: 3rem;
+      }
+      nav span.title {
+        line-height: 3rem;
+        font-weight: 600;
+        margin-left: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <span class="title">滚动新闻</span>
+      <select
+        style="display: none;"
+        id="freq-selector"
+        onchange="setFreq(this.value)"
+      >
+        <option value="30">刷新：30秒</option>
+        <option value="60">刷新：60秒</option>
+        <option value="120">刷新：120秒</option>
+        <option value="240">刷新：240秒</option>
+      </select>
+    </nav>
+    <div class="iframe-group">
+      <iframe
+        src="https://www.chinanews.com/scroll-news/news1.html"
+        frameborder="0"
+      ></iframe>
+      <iframe src="https://news.youth.cn/gn/" frameborder="0"></iframe>
+      <iframe src="http://www.cankaoxiaoxi.com/roll/" frameborder="0"></iframe>
+      <iframe
+        src="http://www.gov.cn/xinwen/gundong.htm"
+        frameborder="0"
+      ></iframe>
+    </div>
+
+    <script>
+      let freq = localStorage.getItem("refresh_freq");
+      console.log("current frequency:", freq);
+      if (!freq) {
+        freq = 6e4;
+        localStorage.setItem("refresh_freq", freq);
+      }
+      const selector = window.document.querySelector("#freq-selector");
+      selector.value = freq / 1e3;
+      selector.style.display = "";
+      function setFreq(val) {
+        // console.log(val);
+        freq = parseInt(val) * 1e3;
+        localStorage.setItem("refresh_freq", freq);
+        window.location.reload();
+      }
+      window.onload = function() {
+        // console.log(selector.style);
+        setTimeout(function() {
+          window.location.reload();
+        }, freq);
+      };
+    </script>
+  </body>
+</html>

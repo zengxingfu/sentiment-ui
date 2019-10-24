@@ -36,6 +36,7 @@
         </a>
         <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('/archives')">历史归档</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('/settings')">设置</a>-->
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('goscroll')">滚动新闻🔗</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('help')">使用说明</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('about')">关于</a>
       </nav>
@@ -82,6 +83,8 @@ export default {
     handleSwitchMenu(route) {
       if (route === "") {
         if (this.$route.name !== "hot") window.location.assign("/");
+      } else if (route === 'goscroll') {
+        window.location.assign('/news-scroll.html')
       } else {
         this.$router.push("/" + route);
         const layout = document.getElementsByClassName(
