@@ -49,7 +49,8 @@ export default {
       ],
       reqParams: {
         sort: "id",
-        user: "all"
+        user: "all",
+        type: "hot"
       },
       requested_at: 0,
       weibo_list: []
