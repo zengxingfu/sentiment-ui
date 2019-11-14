@@ -4,7 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       name: 'hot',
       component: () => import('./views/HotWeibo.vue')
@@ -23,14 +24,21 @@ export default new Router({
       path: '/help',
       name: 'help',
       component: () => import('./views/Help.vue')
-    }, {
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('./views/About.vue')
-    }, {
+    },
+    {
       path: '/latest',
       name: 'latest',
       component: () => import('./views/LatestWeibo.vue')
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: () => import('./views/Tags.vue')
     }
   ]
 })

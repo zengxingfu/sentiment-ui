@@ -1,8 +1,10 @@
 <template>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <div
+    class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header"
+  >
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title">{{pageTitle[$route.name]}}</span>
+        <span class="mdl-layout-title">{{ pageTitle[$route.name] }}</span>
         <div class="mdl-layout-spacer"></div>
         <div
           class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right"
@@ -31,14 +33,26 @@
         <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('')">
           <span class="mdl-badge" :data-badge="counts.hot">热门微博</span>
         </a>
-        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('latest')">
+        <a
+          class="mdl-navigation__link mdl-badge"
+          @click="handleSwitchMenu('latest')"
+        >
           <span class="mdl-badge" :data-badge="counts.latest">增速最快</span>
         </a>
         <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('/archives')">历史归档</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('/settings')">设置</a>-->
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('goscroll')">滚动新闻🔗</a>
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('help')">使用说明</a>
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('about')">关于</a>
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('tags')"
+          >热搜统计</a
+        >
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('goscroll')"
+          >滚动新闻🔗</a
+        >
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('help')"
+          >使用说明</a
+        >
+        <a class="mdl-navigation__link" @click="handleSwitchMenu('about')"
+          >关于</a
+        >
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -55,62 +69,63 @@ export default {
   data() {
     return {
       pageTitle: {
-        hot: "热门微博",
-        archives: "历史归档",
-        settings: "设置",
-        about: "关于",
-        help: "使用说明",
-        latest: "增速最快"
+        hot: '热门微博',
+        archives: '历史归档',
+        settings: '设置',
+        about: '关于',
+        help: '使用说明',
+        latest: '增速最快',
+        tags: '热搜统计'
       },
       counts: {
         hot: 0,
         latest: 0
       }
-    };
+    }
   },
   created() {
-    this.getWeiboCounts();
+    this.getWeiboCounts()
   },
   methods: {
     async getWeiboCounts() {
       try {
-        const r = await this.$request.get("/counts");
-        this.counts = r.data.data;
+        const r = await this.$request.get('/counts')
+        this.counts = r.data.data
       } catch (error) {
-        throw "获取微博数量失败";
+        throw '获取微博数量失败'
       }
     },
     handleSwitchMenu(route) {
-      if (route === "") {
-        if (this.$route.name !== "hot") window.location.assign("/");
+      if (route === '') {
+        if (this.$route.name !== 'hot') window.location.assign('/')
       } else if (route === 'goscroll') {
         window.location.assign('/news-scroll.html')
       } else {
-        this.$router.push("/" + route);
+        this.$router.push('/' + route)
         const layout = document.getElementsByClassName(
-          "mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header has-drawer is-upgraded"
-        )[0];
-        const layoutClasses = layout.getAttribute("class");
-        if (layoutClasses.indexOf("is-small-screen") !== -1) {
+          'mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header has-drawer is-upgraded'
+        )[0]
+        const layoutClasses = layout.getAttribute('class')
+        if (layoutClasses.indexOf('is-small-screen') !== -1) {
           // 小屏幕模式切换后关闭 drawer
           const obfuscator = document.getElementsByClassName(
-            "mdl-layout__obfuscator"
-          )[0];
-          obfuscator.setAttribute("class", "mdl-layout__obfuscator");
+            'mdl-layout__obfuscator'
+          )[0]
+          obfuscator.setAttribute('class', 'mdl-layout__obfuscator')
           const drawer = document.getElementsByClassName(
-            "mdl-layout__drawer"
-          )[0];
-          drawer.setAttribute("class", "mdl-layout__drawer");
-          drawer.setAttribute("aria-hidden", "true");
+            'mdl-layout__drawer'
+          )[0]
+          drawer.setAttribute('class', 'mdl-layout__drawer')
+          drawer.setAttribute('aria-hidden', 'true')
           const drawerButton = document.getElementsByClassName(
-            "mdl-layout__drawer-button"
-          )[0];
-          drawerButton.setAttribute("aria-expanded", "false");
+            'mdl-layout__drawer-button'
+          )[0]
+          drawerButton.setAttribute('aria-expanded', 'false')
         }
       }
     }
   }
-};
+}
 </script>
 
 <style>

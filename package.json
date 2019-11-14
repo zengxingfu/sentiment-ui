@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^2.9.2",
     "dayjs": "^1.8.6",
     "dialog-polyfill": "^0.4.10",
     "file-saver": "^2.0.0",
