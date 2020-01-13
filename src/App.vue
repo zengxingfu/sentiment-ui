@@ -30,20 +30,20 @@
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Weibo Sentiment</span>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('')">
-          <span class="mdl-badge" :data-badge="counts.hot">热门微博</span>
-        </a>
         <a
           class="mdl-navigation__link mdl-badge"
-          @click="handleSwitchMenu('latest')"
+          @click="handleSwitchMenu('')"
         >
           <span class="mdl-badge" :data-badge="counts.latest">增速最快</span>
         </a>
+        <a class="mdl-navigation__link mdl-badge" @click="handleSwitchMenu('hot')">
+          <span class="mdl-badge" :data-badge="counts.hot">热门微博</span>
+        </a>
         <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('/archives')">历史归档</a>
         <a class="mdl-navigation__link" @click="handleSwitchMenu('/settings')">设置</a>-->
-        <a class="mdl-navigation__link" @click="handleSwitchMenu('tags')"
+        <!-- <a class="mdl-navigation__link" @click="handleSwitchMenu('tags')"
           >热搜统计</a
-        >
+        > -->
         <a class="mdl-navigation__link" @click="handleSwitchMenu('goscroll')"
           >滚动新闻🔗</a
         >
@@ -96,10 +96,8 @@ export default {
       }
     },
     handleSwitchMenu(route) {
-      if (route === '') {
-        if (this.$route.name !== 'hot') window.location.assign('/')
-      } else if (route === 'goscroll') {
-        window.location.assign('/news-scroll.html')
+      if (route === 'goscroll') {
+        window.location.assign('/weibo/news-scroll.html')
       } else {
         this.$router.push('/' + route)
         const layout = document.getElementsByClassName(

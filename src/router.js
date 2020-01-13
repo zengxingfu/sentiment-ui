@@ -6,7 +6,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/hot',
       name: 'hot',
       component: () => import('./views/HotWeibo.vue')
     },
@@ -31,7 +31,7 @@ export default new Router({
       component: () => import('./views/About.vue')
     },
     {
-      path: '/latest',
+      path: '/',
       name: 'latest',
       component: () => import('./views/LatestWeibo.vue')
     },

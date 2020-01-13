@@ -12,7 +12,8 @@ import "dialog-polyfill/dialog-polyfill.css";
 
 Vue.config.productionTip = false;
 Vue.prototype.$request = axios.create({
-  baseURL: "https://weibo-sentiment.zengxingfu.com/api/"
+  // baseURL: "https://weibo-sentiment.zengxingfu.com/api/"
+  baseURL: "https://api.rmrbwbxs.cn/api/"
   // baseURL: 'http://localhost/api/'
 });
 dayjs.extend(relativeTime);
